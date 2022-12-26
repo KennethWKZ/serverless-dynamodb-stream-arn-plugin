@@ -1,6 +1,6 @@
 {
   "name": "serverless-dynamodb-stream-arn-plugin-2",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Fetches and then adds existing DynamoDB Table streams to serverless.yml file using table name for serverless framework",
   "main": "index.js",
   "keywords": [
