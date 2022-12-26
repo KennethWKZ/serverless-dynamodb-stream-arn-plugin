@@ -15,7 +15,6 @@ class fetchDynamoDBStreamsPlugin {
       fetchStreamARN: {
         async resolve({ address, params, resolveConfigurationProperty, __ }) {
           let myStreamArn = null;
-          console.log(params);
           try {
             if (!params || params.length < 1)
               throw new Error(
