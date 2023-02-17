@@ -36,6 +36,11 @@ class fetchDynamoDBStreamsPlugin {
               region = params[1];
             }
 
+            const profile = await resolveConfigurationProperty([
+              "provider",
+              "profile",
+            ]);
+
             const tableName = params[0];
             serverless.cli.log(
               `Fetching Streams of [ Table : ${tableName} ] in region ${region}`
@@ -52,7 +57,11 @@ class fetchDynamoDBStreamsPlugin {
               };
             }
 
-            const data = await getDynamoDBStreams(region, tableName);
+            const data = await getDynamoDBStreams({
+              region,
+              tableName,
+              profile,
+            });
 
             myStreamArn = extractStreamARNFromStreamData(data, tableName);
             if (!myStreamArn)
@@ -93,17 +102,22 @@ const extractStreamARNFromStreamData = (data, tableName) => {
   return maybeStream.StreamArn;
 };
 
-const getDynamoDBStreams = async (region, tableName) => {
-  const dynamoStreams = new DynamoDBStreamsClient({
-    region: region,
-    credentials: fromIni({
-      profile: serverless.service.provider.profile,
-    }),
+const getDynamoDBStreams = async (params) => {
+  const clientParams = {
+    region: params.region,
+  };
+
+  if (params.profile) {
+    clientParams.credentials = fromIni({
+      profile: params.profile,
+    });
+  }
+
+  const dynamoStreams = new DynamoDBStreamsClient(clientParams);
+  const dynamoStreamsParams = new ListStreamsCommand({
+    TableName: params.tableName,
   });
-  const params = new ListStreamsCommand({
-    TableName: tableName,
-  });
-  return dynamoStreams.send(params);
+  return dynamoStreams.send(dynamoStreamsParams);
 };
 
 module.exports = fetchDynamoDBStreamsPlugin;
