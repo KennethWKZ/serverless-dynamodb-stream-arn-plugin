@@ -1,15 +1,16 @@
 "use strict";
 
-const AWS = require("aws-sdk");
+const {
+  DynamoDBStreamsClient,
+  ListStreamsCommand,
+} = require("@aws-sdk/client-dynamodb-streams");
+
+const { fromIni } = require("@aws-sdk/credential-providers");
 
 class fetchDynamoDBStreamsPlugin {
   constructor(serverless, options) {
     this.serverless = serverless;
     this.options = options;
-
-    AWS.config.credentials = new AWS.SharedIniFileCredentials({
-      profile: serverless.service.provider.profile,
-    });
 
     this.configurationVariablesSources = {
       fetchStreamARN: {
@@ -93,13 +94,16 @@ const extractStreamARNFromStreamData = (data, tableName) => {
 };
 
 const getDynamoDBStreams = async (region, tableName) => {
-  const dynamoStreams = new AWS.DynamoDBStreams({
+  const dynamoStreams = new DynamoDBStreamsClient({
     region: region,
+    credentials: fromIni({
+      profile: serverless.service.provider.profile,
+    }),
   });
-  const params = {
+  const params = new ListStreamsCommand({
     TableName: tableName,
-  };
-  return dynamoStreams.listStreams(params).promise();
+  });
+  return dynamoStreams.send(params);
 };
 
 module.exports = fetchDynamoDBStreamsPlugin;
