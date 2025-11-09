@@ -11,22 +11,31 @@
     "dynamo"
   ],
   "scripts": {
-    "deploy": "np"
+    "deploy": "np --no-tests"
   },
   "peerDependencies": {
-    "serverless": "^3.22.0"
+    "serverless": "3.x || 4.x",
+    "osls": "3.x"
+  },
+  "peerDependenciesMeta": {
+    "serverless": {
+      "optional": true
+    },
+    "osls": {
+      "optional": true
+    }
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KennethWKZ/serverless-dynamodb-stream-arn-plugin.git"
   },
-  "author": "strewizer",
+  "author": "kennethwkz",
   "license": "MIT",
   "devDependencies": {
-    "np": "^7.6.3"
+    "np": "^10.2.0"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb-streams": "^3.272.0",
-    "@aws-sdk/credential-providers": "^3.272.0"
+    "@aws-sdk/client-dynamodb-streams": "^3.927.0",
+    "@aws-sdk/credential-providers": "^3.927.0"
   }
 }
