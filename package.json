@@ -15,7 +15,7 @@
   },
   "peerDependencies": {
     "serverless": "3.x || 4.x",
-    "osls": "3.x"
+    "osls": "3.x || 4.x"
   },
   "peerDependenciesMeta": {
     "serverless": {
